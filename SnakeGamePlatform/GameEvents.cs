@@ -46,7 +46,7 @@ namespace SnakeGamePlatform
             //Play file in loop!
             board.PlayBackgroundMusic(@"\Images\gameSound.wav");
             //Play file once!
-            board.PlayShortMusic(@"\Images\eat.wav");
+            board.PlayShortMusic(@"\Images\kuku.wav");
 
 
             //Start game timer!
@@ -76,6 +76,17 @@ namespace SnakeGamePlatform
                 food.direction = GameObject.Direction.LEFT;
             if (key == (char)ConsoleKey.RightArrow)
                 food.direction = GameObject.Direction.RIGHT;
+            if(key==(char)ConsoleKey.UpArrow)
+            {
+                Position labelPosition = new Position(100, 100);
+                TextLabel s = new TextLabel("No Way", labelPosition);
+                s.SetFont("Ariel", 24);
+                board.AddLabel(s);
+                   board.RemoveLabel(lblScore);
+                //board.SendToBack(lblScore);
+               
+                
+            }
 
             
         }

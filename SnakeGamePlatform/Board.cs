@@ -114,6 +114,20 @@ namespace SnakeGamePlatform
             board.Controls.Add(lbl.LabelControl);
         }
 
+        public void RemoveLabel(TextLabel lbl)
+        {
+            board.Controls.Remove(lbl.LabelControl);
+            
+        }
+
+        public void SendToBack(TextLabel s)
+        {
+            s.LabelControl.SendToBack();
+        }
+        public void SendToBack(GameObject s)
+        {
+            s.PicControl.SendToBack();
+        }
         public void AddGameObject(GameObject obj)
         {
             board.Controls.Add(obj.PicControl);
