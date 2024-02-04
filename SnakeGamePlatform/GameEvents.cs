@@ -31,9 +31,9 @@ namespace SnakeGamePlatform
             board.YSize = 800;
 
             //Adding a text label to the game board.
-            Position labelPosition = new Position(100, 100);
-            lblScore = new TextLabel("This is just an example!", labelPosition);
-            lblScore.SetFont("Ariel", 24);
+            Position labelPosition = new Position(100, 20);
+            lblScore = new TextLabel("This is just an example! Use right and left arrows to change direction", labelPosition);
+            lblScore.SetFont("Ariel", 14);
             board.AddLabel(lblScore);
 
             //Adding Game Object
@@ -46,7 +46,7 @@ namespace SnakeGamePlatform
             //Play file in loop!
             board.PlayBackgroundMusic(@"\Images\gameSound.wav");
             //Play file once!
-            board.PlayShortMusic(@"\Images\kuku.wav");
+            board.PlayShortMusic(@"\Images\eat.wav");
 
 
             //Start game timer!
@@ -76,19 +76,6 @@ namespace SnakeGamePlatform
                 food.direction = GameObject.Direction.LEFT;
             if (key == (char)ConsoleKey.RightArrow)
                 food.direction = GameObject.Direction.RIGHT;
-            if(key==(char)ConsoleKey.UpArrow)
-            {
-                Position labelPosition = new Position(100, 100);
-                TextLabel s = new TextLabel("No Way", labelPosition);
-                s.SetFont("Ariel", 24);
-                board.AddLabel(s);
-                   board.RemoveLabel(lblScore);
-                //board.SendToBack(lblScore);
-               
-                
-            }
-
-            
         }
     }
 }
