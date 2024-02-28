@@ -15,7 +15,7 @@ namespace SnakeGamePlatform
         //Define game variables here! for example...
         //GameObject [] snake;
         TextLabel lblScore;
-        GameObject food;
+        GameObject food, right, left, down, up;
 
         //This function is called by the game one time on initialization!
         //Here you should define game board resolution and size (x,y).
@@ -28,13 +28,14 @@ namespace SnakeGamePlatform
             //Setup board size and resolution!
             Board.resolutionFactor = 1;
             board.XSize = 600;
-            board.YSize = 800;
+            board.YSize = 600;
 
             //Adding a text label to the game board.
-            Position labelPosition = new Position(100, 20);
-            lblScore = new TextLabel("Ttfr", labelPosition);
+            Position labelPosition = new Position(50, 20);
+            lblScore = new TextLabel("מספר הנקודות:", labelPosition);
             lblScore.SetFont("Ariel", 14);
             board.AddLabel(lblScore);
+
 
             //Adding Game Object
             Position foodPosition = new Position(200, 100);
@@ -42,6 +43,21 @@ namespace SnakeGamePlatform
             food.SetImage(Properties.Resources.food);
             food.direction = GameObject.Direction.RIGHT;
             board.AddGameObject(food);
+
+            //adding misgeret
+            Position boarddown = new Position(550,0) ;
+            down = new GameObject(boarddown,600, 50);
+            down.SetBackgroundColor(Color.Black);
+            board.AddGameObject(down);
+            Position boardup = new Position(200, 0);
+            up = new GameObject(boardup, 10, 10);
+            board.AddGameObject(up);
+            Position boardright = new Position(200, 790);
+            right = new GameObject(boardright, 10, 10);
+            board.AddGameObject(right);
+            Position boardleft = new Position(200, 0);
+            left = new GameObject(boardleft, 10, 10);
+            board.AddGameObject(left);
 
             //Play file in loop!
             board.PlayBackgroundMusic(@"\Images\gameSound.wav");
@@ -61,8 +77,14 @@ namespace SnakeGamePlatform
             Position foodPosition = food.GetPosition();
             if (food.direction == GameObject.Direction.RIGHT)
                 foodPosition.Y = foodPosition.Y + 5;
-            else
+            if (food.direction == GameObject.Direction.LEFT)
                 foodPosition.Y = foodPosition.Y - 5;
+            if (food.direction == GameObject.Direction.DOWN)
+                foodPosition.X = foodPosition.X + 5;
+            if (food.direction == GameObject.Direction.UP)
+                foodPosition.X = foodPosition.X - 5;
+
+
             food.SetPosition(foodPosition);
         }
 
@@ -76,6 +98,10 @@ namespace SnakeGamePlatform
                 food.direction = GameObject.Direction.LEFT;
             if (key == (char)ConsoleKey.RightArrow)
                 food.direction = GameObject.Direction.RIGHT;
+            if (key == (char)ConsoleKey.UpArrow)
+                food.direction = GameObject.Direction.UP;
+            if (key == (char)ConsoleKey.DownArrow)
+                food.direction = GameObject.Direction.DOWN;
         }
     }
 }
