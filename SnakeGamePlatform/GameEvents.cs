@@ -116,7 +116,6 @@ namespace SnakeGamePlatform
                 snake[p - 1].SetPosition(snake[p].GetPosition());
                 p--;
             }
-            //צריך לעשות שזה עובד
 
             Position snakePosition = snake[0].GetPosition();
             if (snake[0].direction == GameObject.Direction.RIGHT)
