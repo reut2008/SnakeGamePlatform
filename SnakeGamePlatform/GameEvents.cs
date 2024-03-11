@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Media;
 using WMPLib;
+using System.Runtime.InteropServices;
 
 namespace SnakeGamePlatform
 {
@@ -14,9 +15,9 @@ namespace SnakeGamePlatform
     {
         //Define game variables here! for example...
         GameObject[] snake, misgeret;
-        TextLabel lblScore;
-        GameObject right, left, down, up;
-        int snakeSize;
+        TextLabel lblScore, score;
+        GameObject right, left, down, up, food;
+        int snakeSize, snakeSpeed, points;
 
         //This function is called by the game one time on initialization!
         //Here you should define game board resolution and size (x,y).
@@ -25,33 +26,75 @@ namespace SnakeGamePlatform
         //use board Object to add game objects to the game board, play background music, set interval, etc...
         public void Lose(GameObject[] snake, GameObject[] misgeret, Board Board, int snakeSize)
         {
+            bool gameEnded = false;
             if(snake[0].IntersectWith(misgeret[0]) || snake[0].IntersectWith(misgeret[1]) || snake[0].IntersectWith(misgeret[2]) || snake[0].IntersectWith(misgeret[3]))
             {
-               //Board.StopTimer();
+               Board.StopTimer();
+                gameEnded = true;
             }
             for (int i=1; i < snakeSize; i++)
             {
                 if (snake[0].IntersectWith(snake[i]))
                 {
-                    //Board.StopTimer();
+                    Board.StopTimer();
+                    gameEnded = true;
                 }
             }
+            if (gameEnded == true)
+            {
+
+            }
         }
+        public void Points ()
+        {
+                points++;
+
+            score.SetText(points.ToString());
+        }
+
+
+        //מוסיף אוכל במקום רנדומלי ומוחק את האוכל הקודם
         public void AddFood (Board board)
         {
+            if (food != null)
+            {
+                board.RemoveGameObject(food);
+            }
             Random rnd = new Random();
             int y = rnd.Next(25,750);
-            int x = rnd.Next(245, 755);
+            int x = rnd.Next(200, 755);
             
             Position snakePosition = new Position(x, y);
-            GameObject food = new GameObject(snakePosition, 20, 20);
+            food = new GameObject(snakePosition, 20, 20);
             food.SetImage(Properties.Resources.food);
             board.AddGameObject(food);
         }
-        //לתקן את הלמעלה באוכל
+
+        public void AddSnake(Board board, GameObject[] snake)
+        {
+            Position pos = snake[snakeSize - 1].GetPosition();
+            snake[snakeSize] = new GameObject(pos, 20, 20);
+            snake[snakeSize].SetImage(Properties.Resources.food);
+            board.AddGameObject(snake[snakeSize]);
+
+            snakeSize++;
+        }
+        public void ChangeSpeed (Board board)
+        {
+            if (snakeSpeed > 0)
+            {
+                snakeSpeed -= 5;
+                board.StopTimer();
+                board.StartTimer(snakeSpeed);
+            }
+
+        }
+        
         public void GameInit(Board board)
         {
-
+            points = 0;
+            snakeSpeed = 180;
+            AddFood(board);
             snake = new GameObject[24000];
             misgeret = new GameObject[4];
 
@@ -66,6 +109,12 @@ namespace SnakeGamePlatform
             lblScore.SetFont("Ariel", 14);
             board.AddLabel(lblScore);
 
+            Position pointsPosition = new Position(75, 20);
+            score = new TextLabel("0", pointsPosition);
+            score.SetFont("Ariel", 14);
+            board.AddLabel(score);
+
+
 
             //Adding Game Object
             Position snakePosition = new Position(300, 300);
@@ -73,49 +122,51 @@ namespace SnakeGamePlatform
             snake[0].SetImage(Properties.Resources.food);
             snake[0].direction = GameObject.Direction.RIGHT;
             board.AddGameObject(snake[0]);
+            snakeSize = 1;
+            #region artificial snake
+            //Position snakePosition1 = new Position(320, 300);
+            //snake[1] = new GameObject(snakePosition1, 20, 20);
+            //snake[1].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[1]);
 
-            //artificial snake
-            Position snakePosition1 = new Position(320, 300);
-            snake[1] = new GameObject(snakePosition1, 20, 20);
-            snake[1].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[1]);
+            //Position snakePosition2 = new Position(340, 300);
+            //snake[2] = new GameObject(snakePosition2, 20, 20);
+            //snake[2].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[2]);
 
-            Position snakePosition2 = new Position(340, 300);
-            snake[2] = new GameObject(snakePosition2, 20, 20);
-            snake[2].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[2]);
+            //Position snakePosition3 = new Position(360, 300);
+            //snake[3] = new GameObject(snakePosition3, 20, 20);
+            //snake[3].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[3]);
 
-            Position snakePosition3 = new Position(360, 300);
-            snake[3] = new GameObject(snakePosition3, 20, 20);
-            snake[3].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[3]);
+            //Position snakePosition4 = new Position(360, 300);
+            //snake[4] = new GameObject(snakePosition3, 20, 20);
+            //snake[4].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[4]);
 
-            Position snakePosition4 = new Position(360, 300);
-            snake[4] = new GameObject(snakePosition3, 20, 20);
-            snake[4].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[4]);
+            //Position snakePosition5 = new Position(360, 300);
+            //snake[5] = new GameObject(snakePosition3, 20, 20);
+            //snake[5].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[5]);
 
-            Position snakePosition5 = new Position(360, 300);
-            snake[5] = new GameObject(snakePosition3, 20, 20);
-            snake[5].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[5]);
+            //Position snakePosition6 = new Position(360, 300);
+            //snake[6] = new GameObject(snakePosition3, 20, 20);
+            //snake[6].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[6]);
 
-            Position snakePosition6 = new Position(360, 300);
-            snake[6] = new GameObject(snakePosition3, 20, 20);
-            snake[6].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[6]);
+            //Position snakePosition7 = new Position(360, 300);
+            //snake[7] = new GameObject(snakePosition3, 20, 20);
+            //snake[7].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[7]);
 
-            Position snakePosition7 = new Position(360, 300);
-            snake[7] = new GameObject(snakePosition3, 20, 20);
-            snake[7].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[7]);
+            //Position snakePosition8 = new Position(360, 300);
+            //snake[8] = new GameObject(snakePosition3, 20, 20);
+            //snake[8].SetImage(Properties.Resources.food);
+            //board.AddGameObject(snake[8]);
 
-            Position snakePosition8 = new Position(360, 300);
-            snake[8] = new GameObject(snakePosition3, 20, 20);
-            snake[8].SetImage(Properties.Resources.food);
-            board.AddGameObject(snake[8]);
+            //snakeSize =9;
+            #endregion
 
-            snakeSize =9;
             //adding misgeret array
 
             Position boarddown = new Position(775,0) ;
@@ -145,7 +196,7 @@ namespace SnakeGamePlatform
 
 
             //Start game timer!
-            board.StartTimer(1);
+            board.StartTimer(snakeSpeed);
         }
         
         
@@ -173,9 +224,21 @@ namespace SnakeGamePlatform
 
 
             snake[0].SetPosition(snakePosition);
-
+            
             Lose(snake, misgeret, board, snakeSize);
-            AddFood(board);
+            if (food.OnScreen(board)) { }
+            else
+            {
+                AddFood(board);
+            }
+            if (snake[0].IntersectWith(food))
+            {
+                AddFood(board);
+                AddSnake(board, snake);
+                ChangeSpeed(board);
+                Points();
+            }
+
         }
 
         //This function is called by the game when the user press a key down on the keyboard.
