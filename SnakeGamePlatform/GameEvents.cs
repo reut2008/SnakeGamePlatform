@@ -18,15 +18,15 @@ namespace SnakeGamePlatform
         TextLabel lblScore, score;
         GameObject right, left, down, up, food;
         int snakeSize, snakeSpeed, points;
+        bool gameEnded;
 
         //This function is called by the game one time on initialization!
         //Here you should define game board resolution and size (x,y).
         //Here you should initialize all variables defined above and create all visual objects on screen.
         //You could also start game background music here.
         //use board Object to add game objects to the game board, play background music, set interval, etc...
-        public void Lose(GameObject[] snake, GameObject[] misgeret, Board Board, int snakeSize)
+        public void Lose(GameObject[] snake, GameObject[] misgeret, Board Board, int snakeSize, Board board)
         {
-            bool gameEnded = false;
             if(snake[0].IntersectWith(misgeret[0]) || snake[0].IntersectWith(misgeret[1]) || snake[0].IntersectWith(misgeret[2]) || snake[0].IntersectWith(misgeret[3]))
             {
                Board.StopTimer();
@@ -40,10 +40,12 @@ namespace SnakeGamePlatform
                     gameEnded = true;
                 }
             }
-            if (gameEnded == true)
+            if (gameEnded)
             {
-
+                board.PlayBackgroundMusic(@"\Images\");
+                board.PlayShortMusic(@"\Images\lose.wav");
             }
+
         }
         public void Points ()
         {
@@ -72,6 +74,7 @@ namespace SnakeGamePlatform
 
         public void AddSnake(Board board, GameObject[] snake)
         {
+            
             Position pos = snake[snakeSize - 1].GetPosition();
             snake[snakeSize] = new GameObject(pos, 20, 20);
             snake[snakeSize].SetImage(Properties.Resources.food);
@@ -89,11 +92,25 @@ namespace SnakeGamePlatform
             }
 
         }
+        public void Reset (Board board)
+        {
+            board.StopTimer();
+            for (int i = 0; i < snakeSize; i++)
+            {
+                board.RemoveGameObject(snake[i]);
+                snake[i] = null;
+            }
+            board.RemoveGameObject(food);
+            points = 0;
+            snakeSpeed = 181;
+            board.PlayBackgroundMusic(@"\Images\backgroundmusic.mp4");
+            GameInit(board);
+        }
         
         public void GameInit(Board board)
         {
             points = 0;
-            snakeSpeed = 180;
+            snakeSpeed = 181;
             AddFood(board);
             snake = new GameObject[24000];
             misgeret = new GameObject[4];
@@ -190,9 +207,7 @@ namespace SnakeGamePlatform
             misgeret[3].SetBackgroundColor(Color.Black);
 
             //Play file in loop!
-            board.PlayBackgroundMusic(@"\Images\gameSound.wav");
-            //Play file once!
-            board.PlayShortMusic(@"\Images\eat.wav");
+            board.PlayBackgroundMusic(@"\Images\backgroundmusic.mp4");
 
 
             //Start game timer!
@@ -225,7 +240,7 @@ namespace SnakeGamePlatform
 
             snake[0].SetPosition(snakePosition);
             
-            Lose(snake, misgeret, board, snakeSize);
+            Lose(snake, misgeret, board, snakeSize, board);
             if (food.OnScreen(board)) { }
             else
             {
@@ -255,6 +270,14 @@ namespace SnakeGamePlatform
                 snake[0].direction = GameObject.Direction.UP;
             if (key == (char)ConsoleKey.DownArrow)
                 snake[0].direction = GameObject.Direction.DOWN;
+
+            if (gameEnded == true)
+            {
+                if (key == (char)ConsoleKey.Spacebar)
+                {
+                    Reset(board);
+                }
+            }
         }
     }
 }
