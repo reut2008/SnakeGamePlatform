@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>SnakeGamePlatform</RootNamespace>
     <AssemblyName>SnakeGamePlatform</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -138,6 +138,12 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\betterhead.jpg" />
+    <None Include="Resources\backtmuna.jpg" />
+    <None Include="Resources\burger.jpg" />
+    <None Include="Resources\head.jpg" />
+    <None Include="Resources\snakebody.jpg" />
+    <None Include="Images\food.jpg" />
     <Content Include="Images\kuku.mp3" />
     <Content Include="Images\kuku.wav" />
   </ItemGroup>
